@@ -1,1 +1,88 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <audio id="ambient-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=ambient-piano-amp-strings-10711.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="paper-sound">
+        <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=paper-rustle-81855.mp3" type="audio/mpeg">
+    </audio>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <button id="audio-toggle" class="glass-btn float-anim">
+        <svg id="audio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    </button>
+
+    <section id="landing-scene" class="scene active">
+        <div class="glass-panel text-center fade-in-up">
+            <h1 class="title">Someone very special has a surprise waiting for you...</h1>
+            <button id="btn-begin" class="premium-btn mt-2">
+                <span>Begin</span>
+                <div class="glow-effect"></div>
+            </button>
+        </div>
+    </section>
+
+    <section id="envelope-scene" class="scene">
+        <div class="table-background"></div>
+        <div class="envelope-container">
+            <div class="envelope">
+                <div class="flap"></div>
+                <div class="letter">
+                    <div class="letter-content">
+                        <p id="typewriter-text"></p>
+                        <svg class="corner-panda" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="#fff" stroke="#333" stroke-width="4"/>
+                            <circle cx="35" cy="40" r="8" fill="#333"/>
+                            <circle cx="65" cy="40" r="8" fill="#333"/>
+                            <path d="M40 60 Q50 70 60 60" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="20" cy="20" r="15" fill="#333"/>
+                            <circle cx="80" cy="20" r="15" fill="#333"/>
+                            <g class="panda-wave"><path d="M85 60 Q95 50 100 40" fill="none" stroke="#333" stroke-width="8" stroke-linecap="round"/></g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="envelope-front"></div>
+                
+                <div id="panda-seal" class="seal">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="48" fill="#B76E79" stroke="#8A4A54" stroke-width="4"/>
+                        <circle cx="35" cy="45" r="6" fill="#fff"/><circle cx="65" cy="45" r="6" fill="#fff"/>
+                        <path d="M42 60 Q50 68 58 60" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="25" cy="25" r="12" fill="#8A4A54"/><circle cx="75" cy="25" r="12" fill="#8A4A54"/>
+                    </svg>
+                    <div class="seal-text">Tap to Open</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="garden-scene" class="scene">
+        <div class="garden-background"></div>
+        <div class="glass-panel text-center">
+            <h2 class="title mb-2">I have one last surprise for you...</h2>
+            <a href="https://example.com/your-final-gift" target="_blank" class="premium-btn gold-btn mt-2" id="btn-gift">
+                <span>🎁 Click Here For Your Surprise</span>
+                <div class="glow-effect"></div>
+            </a>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
