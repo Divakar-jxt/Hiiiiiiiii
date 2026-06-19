@@ -1,1 +1,302 @@
 
+:root {
+    /* Premium Color Palette */
+    --pastel-pink: #FFD1DC;
+    --lavender: #E6E6FA;
+    --cream: #FFFDD0;
+    --champagne-gold: #F7E7CE;
+    --rose-gold: #B76E79;
+    --dark-text: #2C3E50;
+    
+    /* UI Variables */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.3);
+    
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Poppins', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0A0A1A; /* Deep night sky */
+    color: #fff;
+    font-family: var(--font-body);
+    overflow: hidden; /* Prevent scrolling, full cinematic control */
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Canvas Background */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Scene Management */
+.scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 10;
+    transition: visibility 0s linear 1s;
+}
+
+.scene.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    max-width: 90%;
+    width: 600px;
+    box-shadow: var(--shadow-premium);
+    z-index: 20;
+}
+
+/* Typography */
+.text-center { text-align: center; }
+.mt-2 { margin-top: 2rem; }
+.mb-2 { margin-bottom: 2rem; }
+
+.title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.4;
+    text-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Premium Buttons */
+.premium-btn {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    border: 1px solid var(--glass-border);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.premium-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.premium-btn span {
+    position: relative;
+    z-index: 2;
+    letter-spacing: 1px;
+}
+
+.gold-btn {
+    border-color: var(--champagne-gold);
+    color: var(--champagne-gold);
+}
+
+/* Audio Control */
+#audio-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#audio-toggle svg { width: 20px; height: 20px; }
+
+/* --- 3D ENVELOPE SCENE --- */
+.table-background {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(10,10,26,0.7), rgba(10,10,26,0.9)), url('https://images.unsplash.com/photo-1551269901-5c5e14c25df7?auto=format&fit=crop&w=2069&q=80') center/cover;
+    z-index: -1;
+}
+
+.envelope-container {
+    perspective: 1200px; /* 3D space */
+    z-index: 20;
+}
+
+.envelope {
+    position: relative;
+    width: clamp(300px, 80vw, 500px);
+    height: clamp(200px, 50vw, 320px);
+    background: #e0d5c1; /* Premium paper texture color */
+    box-shadow: var(--shadow-premium);
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.envelope-front {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 clamp(150px, 40vw, 250px) clamp(120px, 30vw, 180px) clamp(150px, 40vw, 250px);
+    border-color: transparent #d4c8b3 #cbbca5 #d4c8b3;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: clamp(120px, 30vw, 180px) clamp(150px, 40vw, 250px) 0 clamp(150px, 40vw, 250px);
+    border-color: #e6dac6 transparent transparent transparent;
+    transform-origin: top;
+    z-index: 4;
+    transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+}
+
+.flap.open {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+/* Panda Wax Seal */
+.seal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -10px); /* Align with flap tip */
+    width: 70px;
+    height: 70px;
+    z-index: 5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.seal:hover {
+    transform: translate(-50%, -10px) scale(1.1) rotate(5deg);
+}
+
+.seal.broken {
+    opacity: 0;
+    transform: translate(-50%, -10px) scale(1.5);
+    pointer-events: none;
+}
+
+.seal-text {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: var(--cream);
+    white-space: nowrap;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+/* The Letter inside */
+.letter {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background: #fffafa;
+    border-radius: 4px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.letter-content {
+    padding: 2rem;
+    font-family: var(--font-heading);
+    color: var(--dark-text);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    text-align: center;
+    line-height: 1.8;
+    opacity: 0; /* Hidden initially */
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.corner-panda {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    opacity: 0;
+}
+
+.panda-wave {
+    transform-origin: bottom right;
+    animation: wave 2s infinite ease-in-out;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(20deg); }
+}
+
+/* Garden Background */
+.garden-background {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2068&q=80') center/cover;
+    z-index: -1;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
